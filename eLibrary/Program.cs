@@ -20,21 +20,6 @@ builder.Services.AddDbContext<eLibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("eLibrary"))
 );
 
-builder.Services.AddAuthentication(
-    CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(option =>
-    {
-        option.LoginPath = "/auth/login" ;
-        option.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-    });
-
-
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin"));
-
-    });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

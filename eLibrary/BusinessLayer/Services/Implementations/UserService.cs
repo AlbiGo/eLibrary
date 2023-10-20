@@ -18,13 +18,10 @@ namespace eLibrary.BusinessLayer.Services.Implementations
     {
         private readonly eLibraryDbContext _eLibraryDbContext;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserService(eLibraryDbContext eLibraryDbContext,
-            IHttpContextAccessor httpContextAccessor)
+        public UserService(eLibraryDbContext eLibraryDbContext)
         {
             _eLibraryDbContext = eLibraryDbContext;
-            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -107,23 +104,6 @@ namespace eLibrary.BusinessLayer.Services.Implementations
 
                 //If user exits generate JWT token 
                 var token = GenerateToken(client);
-
-                var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Email, client.Email),
-                    new Claim("Token", token),
-                    new Claim("IsAdmin", client.Email)
-                };
-
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                AuthenticationProperties properties = new AuthenticationProperties()
-                {
-                    AllowRefresh = true,
-                    IsPersistent = true,
-                };
-                
-                await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
-                    new ClaimsPrincipal(claimsIdentity), properties);
 
                 return token;
             }
