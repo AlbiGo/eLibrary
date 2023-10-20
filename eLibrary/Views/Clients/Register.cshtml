@@ -1,0 +1,27 @@
+﻿@model eLibrary.ViewModels.UserRegisterVM
+
+<div class="container">
+@*    asp-action = Action which form calls on controller
+*@        <form asp-action="Register">
+           <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label"></label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" class="form-control" />
+        </div>
+            <div class="form-group">
+                <input type="submit" value="Register" class="btn btn-primary" />
+            </div>
+        </form>
+</div>
+
