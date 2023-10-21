@@ -1,6 +1,16 @@
 ﻿@model eLibrary.ViewModels.LogInVM
 
-<div class="container">
+<style>
+    .container
+    {
+        width: 400px;
+    }
+
+    .card{
+        box-shadow : 2px 2px 2px 2px black;
+    }
+</style>
+<div class="container card">
     <form asp-action="LogIn">
         <div class="form-group">
             <label asp-for="Email" class="control-label"></label>
@@ -10,6 +20,8 @@
             <label asp-for="Password" class="control-label"></label>
             <input asp-for="Password" class="form-control" />
         </div>
+        <br />
+        <br />
         <div class="form-group">
             <input type="submit" value="LogIn" class="btn btn-primary" />
         </div>

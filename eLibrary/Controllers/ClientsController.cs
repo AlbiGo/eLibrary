@@ -121,7 +121,7 @@ namespace eLibrary.Controllers
             try
             {
                 var token = await _userService.LogIn(logInVM);
-                return RedirectToAction("Clients", "Profile");
+                return RedirectToAction("Profile", "Clients");
             }
             catch (Exception ex)
             {

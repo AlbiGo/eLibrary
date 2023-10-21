@@ -8,6 +8,7 @@ namespace eLibrary.DataLayers.Entities
         public string Description { get; set; }
         public int Stock { get; set; }
         public bool IsAvailable { get; set; }
+        public string Kategoria { get; set; }
 
         #region Author Relationship
 

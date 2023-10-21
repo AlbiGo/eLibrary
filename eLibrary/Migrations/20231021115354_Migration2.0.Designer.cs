@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eLibrary.DataLayers.Context;
 
@@ -11,9 +12,11 @@ using eLibrary.DataLayers.Context;
 namespace eLibrary.Migrations
 {
     [DbContext(typeof(eLibraryDbContext))]
-    partial class eLibraryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231021115354_Migration2.0")]
+    partial class Migration20
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
