@@ -8,5 +8,6 @@ namespace eLibrary.ViewModels
         public string Description { get; set; }
         public bool IsAvailable { get; set; }
         public string Author { get; set; }
+        public string BookPicURL { get; set; }
     }
 }

@@ -92,7 +92,7 @@ namespace eLibrary.Controllers
             try
             {
                 await _userService.RegisterUser(userRegisterVM);
-                return View(userRegisterVM);
+                return RedirectToAction("Auth","Login");
             }
             catch(Exception ex)
             {

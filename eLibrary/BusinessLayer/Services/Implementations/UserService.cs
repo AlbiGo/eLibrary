@@ -68,7 +68,7 @@ namespace eLibrary.BusinessLayer.Services.Implementations
         // To generate token
         private string GenerateToken(Client user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ACDt1vR3lXToPQ1g3MyN"));
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("eLibrary123131414"));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             
             var claims = new[]

@@ -17,7 +17,10 @@ builder.Services.AddRazorPages();
 
 #region Services Dependency Injection
 
+//App services Injection
 builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
+builder.Services.AddScoped(typeof(IBookService), typeof(BookService));
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(
     CookieAuthenticationDefaults.AuthenticationScheme)
@@ -55,6 +58,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Book}/{action=Books}/{id?}");
 
 app.Run();
