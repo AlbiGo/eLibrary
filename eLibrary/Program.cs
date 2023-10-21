@@ -14,11 +14,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRazorPages();
-builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
 
+#region Services Dependency Injection
+
+builder.Services.AddScoped(typeof(IUserService), typeof(UserService));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication(
+    CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(option =>
+    {
+        option.LoginPath = "/auth/login";
+        option.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+    });
+#endregion
+
+#region Database Injection
 builder.Services.AddDbContext<eLibraryDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("eLibrary"))
 );
+#endregion
 
 var app = builder.Build();
 
@@ -35,6 +49,8 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+//Security
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -6,6 +6,5 @@ namespace eLibrary.BusinessLayer.Services.Interfaces
     {
         public Task RegisterUser(UserRegisterVM userRegisterVM);
         public Task<string> LogIn(LogInVM logInVM);
-
     }
 }

@@ -17,11 +17,13 @@ namespace eLibrary.BusinessLayer.Services.Implementations
     public class UserService : IUserService
     {
         private readonly eLibraryDbContext _eLibraryDbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public UserService(eLibraryDbContext eLibraryDbContext)
+        public UserService(eLibraryDbContext eLibraryDbContext,
+            IHttpContextAccessor httpContextAccessor)
         {
             _eLibraryDbContext = eLibraryDbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                 var newClient = new Client()
                 {
                     Email = userRegisterVM.Email,
-                    IsAdmin = true,
+                    //IsAdmin = true,
                     Created = DateTime.Now,
                     DataRegjistrimit = DateTime.Now,
                     FirstName = userRegisterVM.FirstName,
@@ -59,7 +61,7 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("Error in registering user");
             }
         }
 
@@ -85,6 +87,7 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+
         /// <summary>
         /// Log in
         /// </summary>
@@ -105,11 +108,37 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                 //If user exits generate JWT token 
                 var token = GenerateToken(client);
 
+                //Add Admin claims
+                var claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.Email, client.Email),
+                    new Claim(ClaimTypes.NameIdentifier, client.ID.ToString()),
+                    new Claim("Token", token)
+                };
+
+                //If user is admin add admin claim
+                if (client.IsAdmin)
+                {
+                    claims.Add(new Claim("IsAdmin", client.IsAdmin.ToString()));
+                }
+
+                //Security informarition
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                AuthenticationProperties properties = new AuthenticationProperties()
+                {
+                    AllowRefresh = true,
+                    IsPersistent = true,
+                };
+
+                //Sign in on the session
+                await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                 new ClaimsPrincipal(claimsIdentity), properties);
+
                 return token;
             }
             catch (Exception ex)
             {
-                throw;
+                throw new Exception("Error in log in");
             }
         }
     }
