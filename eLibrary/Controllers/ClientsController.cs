@@ -121,7 +121,7 @@ namespace eLibrary.Controllers
             try
             {
                 var token = await _userService.LogIn(logInVM);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Clients", "Profile");
             }
             catch (Exception ex)
             {
@@ -129,6 +129,36 @@ namespace eLibrary.Controllers
                 return View("Error");
             }
         }
+
+        public async Task<IActionResult> Profile()
+        {
+            try
+            {
+                var userProfile = await _userService.GetUserProfile();
+                return View(userProfile);
+            }
+            catch(Exception ex)
+            {
+                ViewBag.errorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> LogOff()
+        {
+            try
+            {
+                await _userService.Logoff();
+                return RedirectToAction("Index","Home");
+            }
+            catch(Exception ex)
+            {
+                ViewBag.errorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
 
         // GET: Clients/Edit/5
         public async Task<IActionResult> Edit(int? id)

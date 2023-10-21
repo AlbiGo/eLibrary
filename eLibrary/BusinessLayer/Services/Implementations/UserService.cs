@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace eLibrary.BusinessLayer.Services.Implementations
 {
@@ -87,7 +87,17 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
+        public async Task Logoff()
+        {
+            try
+            {
+                await _httpContextAccessor.HttpContext.SignOutAsync();
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error in logging off");
+            }
+        }
         /// <summary>
         /// Log in
         /// </summary>
@@ -139,6 +149,48 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             catch (Exception ex)
             {
                 throw new Exception("Error in log in");
+            }
+        }
+
+        public async Task<UserProfileVM> GetUserProfile()
+        {
+            try
+            {
+                var userClaim = _httpContextAccessor.HttpContext.User.Claims
+                    .Where(p => p.Type == ClaimTypes.NameIdentifier)
+                    .FirstOrDefault();
+
+                if (userClaim == null)
+                {
+                    throw new Exception("User is not authenticated");
+                }
+
+                var userID = int.Parse(userClaim.Value);
+
+                var user = await _eLibraryDbContext.Clients
+                    .Where(p => p.ID == userID)
+                    .FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    throw new Exception("User account does not exist");
+                }
+
+                var userProfileVM = new UserProfileVM()
+                {
+                    FirstName = user.FirstName,
+                    LastnName = user.LastnName,
+                    Email = user.Email,
+                    FullName = user.FullName,
+                    ProfilePicUrl = "/Images/1600w-2PE9qJLmPac.WEBP"
+                };
+
+                return userProfileVM;
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("Error in getting user profile");
             }
         }
     }

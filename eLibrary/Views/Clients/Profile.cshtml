@@ -1,0 +1,21 @@
+﻿@model eLibrary.ViewModels.UserProfileVM
+<style>
+    img{
+        width : 400px !important;
+    }
+</style>
+<div class="container" style=" .container { max-width:500px; max-height : 500px;}">
+    <div class="card">
+        <div class="card-title">@Model.FullName</div>
+        <div class="row">
+            <div class="col-lg-4">
+                <img style="img {width : 400px;}" src="@Model.ProfilePicUrl" />
+            </div>
+            <div class="col-md-6">
+                <div class="card-subtitle"> @Model.FirstName</div>
+                <div class="card-subtitle"> @Model.LastnName</div>
+                <div class="card-subtitle"> @Model.Email</div>
+            </div>
+        </div>
+    </div>
+</div>
