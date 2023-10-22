@@ -31,6 +31,22 @@ namespace eLibrary.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetByAuthorName(string authorName)
+        {
+            try
+            {
+                var books = await _bookService.GetByAuthorName(authorName);
+                return View("Books", books);
+            }
+            catch(Exception ex)
+            {
+                ViewBag.errorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+
         public async Task<IActionResult> Books()
         {
             try

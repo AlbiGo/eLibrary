@@ -5,6 +5,19 @@
         box-shadow: 2px 2px 2px 2px black;
     }
 </style>
+<div>
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-control-sm">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search by Title" aria-label="Search by Title">
+        </form>
+        <form class="form-control-sm">
+            <input class="form-control mr-sm-2" asp-action="GetByAuthorName" asp-controller="Book" method="GET" type="search" placeholder="Search by Name" aria-label="Search by Author Name">
+        </form>
+    </nav>
+  @*  <nav class="navbar navbar-light bg-light">
+       
+    </nav>*@
+</div>
 <div class="container">
     <div class="row">
         @foreach (var book in Model)
@@ -18,7 +31,7 @@
                     </div>
                     <div class="card-body text-center">
                         <div class="card-title">
-                            @book.Title
+                            <strong>@book.Title</strong>
                         </div>
                         <div class="card-subtitle">
                             @book.Description

@@ -6,5 +6,6 @@ namespace eLibrary.BusinessLayer.Services.Interfaces
     {
         public Task<List<BookVM>> GetBooks();
         public Task<BookVM> GetBookByID(int bookID);
+        public Task<List<BookVM>> GetByAuthorName(string authorName);
     }
 }

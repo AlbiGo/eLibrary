@@ -4,6 +4,7 @@ using eLibrary.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using Dapper;
+using eLibrary.DataLayers.Entities;
 
 namespace eLibrary.BusinessLayer.Services.Implementations
 {
@@ -48,6 +49,7 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                 //Menyra 1
                 var book = _eLibraryDbContext.Books
                     .Include(p => p.Author)
+                    .Include(p => p.Kategoria)
                     .Where(p => p.ID == bookID)
                     .FirstOrDefault();
 
@@ -65,7 +67,8 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                     BookPicURL = "/Images/bookSpeakingVolumes.jpeg",
                     Description = book.Description,
                     ID = book.ID,
-                    Title = book.Title
+                    Title = book.Title,
+                    Kategoria = book.Kategoria
                 };
 
                 return bookVM;
@@ -90,7 +93,8 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                                                 b.Description as Description,
                                                 b.IsAvailable as IsAvailable,
                                                 a.FullName as Author,
-                                                'Images/bookSpeakingVolumes.jpeg' as BookPicURL
+                                                'Images/bookSpeakingVolumes.jpeg' as BookPicURL,
+                                                Kategoria
                                                 from Books b
                                                 inner join Authors a on a.ID = b.AuthorID
                                                 where @bookID = b.ID and
@@ -106,6 +110,38 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             catch (Exception ex)
             {
                 throw new Exception("Error in getting book");
+            }
+        }
+
+        public async Task<List<BookVM>> GetByAuthorName(string authorName)
+        {
+            try
+            {
+                var books = _eLibraryDbContext.Books
+                    .Include(p => p.Author)
+                    .Where(p => p.Author.FullName.Contains(authorName))
+                    .ToList();
+
+                var booksVM = new List<BookVM>();
+
+                foreach (var book in books)
+                {
+                    booksVM.Add(new BookVM()
+                    { 
+                        Author = book.Author.FullName,
+                        IsAvailable = true,
+                        BookPicURL = "/Images/bookSpeakingVolumes.jpeg",
+                        Description = book.Description,
+                        ID = book.ID,
+                        Kategoria= book.Kategoria,
+                        Title = book.Title
+                    });
+                }
+                return booksVM;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error in getting books");
             }
         }
 
