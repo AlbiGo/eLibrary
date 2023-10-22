@@ -16,7 +16,6 @@ namespace eLibrary.Controllers
             return View();
         }
 
-
         public async Task<IActionResult> Details(int id)
         {
             try
@@ -45,7 +44,6 @@ namespace eLibrary.Controllers
                 return View("Error");
             }
         }
-
 
         public async Task<IActionResult> Books()
         {

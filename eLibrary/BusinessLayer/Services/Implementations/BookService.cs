@@ -49,7 +49,6 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                 //Menyra 1
                 var book = _eLibraryDbContext.Books
                     .Include(p => p.Author)
-                    .Include(p => p.Kategoria)
                     .Where(p => p.ID == bookID)
                     .FirstOrDefault();
 

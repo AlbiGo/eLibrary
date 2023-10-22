@@ -8,6 +8,6 @@ namespace eLibrary.BusinessLayer.Services.Interfaces
         public Task<string> LogIn(LogInVM logInVM);
         public Task Logoff();
         public Task<UserProfileVM> GetUserProfile();
-
+        public Task BorrowBook(int bookID);
     }
 }

@@ -55,7 +55,13 @@ app.UseRouting();
 //Security
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+    pattern: "{controller=Book}/{action=Books}/{id?}");
+    endpoints.MapRazorPages();
+});
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Book}/{action=Books}/{id?}");

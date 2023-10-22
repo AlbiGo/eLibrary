@@ -152,10 +152,16 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             }
         }
 
-        public async Task<UserProfileVM> GetUserProfile()
+        public async Task BorrowBook(int bookID)
         {
             try
             {
+                var book = _eLibraryDbContext.Books
+                    .Where(p => p.ID == bookID)
+                    .FirstOrDefault();
+
+                //Get logged user from session
+                #region 
                 var userClaim = _httpContextAccessor.HttpContext.User.Claims
                     .Where(p => p.Type == ClaimTypes.NameIdentifier)
                     .FirstOrDefault();
@@ -175,6 +181,55 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                 {
                     throw new Exception("User account does not exist");
                 }
+                #endregion
+                if (book == null)
+                    throw new Exception("Book does not exist");
+
+                var clientBook = new BookClient()
+                {
+                    BookID = book.ID,
+                    ClientID = user.ID,
+                    BorrowedDate = DateTime.Now
+                };
+
+                _eLibraryDbContext.BookClients.Add(clientBook);
+                _eLibraryDbContext.SaveChanges();
+
+                book.Stock--;
+                _eLibraryDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error in borrowing book");
+            }
+        }
+
+        public async Task<UserProfileVM> GetUserProfile()
+        {
+            try
+            {
+                //Get logged user from session
+                #region 
+                var userClaim = _httpContextAccessor.HttpContext.User.Claims
+                    .Where(p => p.Type == ClaimTypes.NameIdentifier)
+                    .FirstOrDefault();
+
+                if (userClaim == null)
+                {
+                    throw new Exception("User is not authenticated");
+                }
+
+                var userID = int.Parse(userClaim.Value);
+
+                var user = await _eLibraryDbContext.Clients
+                    .Where(p => p.ID == userID)
+                    .FirstOrDefaultAsync();
+
+                if (user == null)
+                {
+                    throw new Exception("User account does not exist");
+                }
+                #endregion
 
                 var userProfileVM = new UserProfileVM()
                 {

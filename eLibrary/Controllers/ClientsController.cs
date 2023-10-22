@@ -72,6 +72,22 @@ namespace eLibrary.Controllers
             return View(client);
         }
 
+        [HttpGet("borrowbook")]
+        public async Task<IActionResult> BorrowBook([FromQuery]int id)
+        {
+            try
+            {
+                await _userService.BorrowBook(id);
+                return RedirectToAction("Books", "Book");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.errorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
+
         /// <summary>
         /// Return Register View
         /// </summary>

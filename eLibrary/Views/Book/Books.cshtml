@@ -10,13 +10,10 @@
         <form class="form-control-sm">
             <input class="form-control mr-sm-2" type="search" placeholder="Search by Title" aria-label="Search by Title">
         </form>
-        <form class="form-control-sm">
-            <input class="form-control mr-sm-2" asp-action="GetByAuthorName" asp-controller="Book" method="GET" type="search" placeholder="Search by Name" aria-label="Search by Author Name">
+        <form class="form-control-sm" asp-for="authorName" asp-action="GetByAuthorName" asp-controller="Book" method="GET">
+            <input class="form-control mr-sm-2" name="authorName" type="search" placeholder="Search by Name" aria-label="Search by Author Name">
         </form>
     </nav>
-  @*  <nav class="navbar navbar-light bg-light">
-       
-    </nav>*@
 </div>
 <div class="container">
     <div class="row">
@@ -25,6 +22,12 @@
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-header">
+                        @if (!book.IsAvailable)
+                        {
+                            <p style="color : red">
+                                This book is not available. You cannot book it.
+                            </p>
+                        }
                         <div class="card-img">
                             <img src="@book.BookPicURL" />
                         </div>
@@ -42,9 +45,33 @@
                     </div>
                     <div class="card-footer">
                         <button onclick="location.href='@Url.Action("Details", "Book", new {id = book.ID})'" class="btn btn-outline-dark">Details</button>
+                        @if (book.IsAvailable)
+                        {
+                            <button onclick="borrowBook(@book.ID)" class="btn btn-outline-dark">Borrow book</button>
+                        }
                     </div>
                 </div>
             </div>
         }
     </div>
 </div>
+<script>
+    function borrowBook(id)
+    {
+        var url = '@Url.Action("borrowbook", "Clients")' + '/?id=' + id;
+        console.log(url);
+        debugger;
+        $.ajax({
+            type: 'GET',
+            url: url,
+            contentType: 'application/json',
+            success: function (r) {
+                console.log("RESULT", r);
+            },
+            error: function (xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                alert(err.Message);
+            }
+        });
+    }
+</script>
