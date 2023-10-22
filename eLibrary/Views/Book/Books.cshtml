@@ -1,24 +1,35 @@
 ﻿@model List<eLibrary.ViewModels.BookVM>
-
+<style>
+    
+    .card {
+        box-shadow: 2px 2px 2px 2px black;
+    }
+</style>
 <div class="container">
     <div class="row">
         @foreach (var book in Model)
         {
             <div class="col-lg-3">
                 <div class="card">
-                    <div class="card-img">
-                        <img src="@book.BookPicURL" />
+                    <div class="card-header">
+                        <div class="card-img">
+                            <img src="@book.BookPicURL" />
+                        </div>
                     </div>
-                    <div class="card-title">
-                        @book.Title
+                    <div class="card-body text-center">
+                        <div class="card-title">
+                            @book.Title
+                        </div>
+                        <div class="card-subtitle">
+                            @book.Description
+                        </div>
+                        <div class="card-subtitle">
+                            @book.Author
+                        </div>
                     </div>
-                    <div class="card-subtitle">
-                        @book.Description
+                    <div class="card-footer">
+                        <button onclick="location.href='@Url.Action("Details", "Book", new {id = book.ID})'" class="btn btn-outline-dark">Details</button>
                     </div>
-                    <div class="card-subtitle">
-                        @book.Author
-                    </div>
-
                 </div>
             </div>
         }

@@ -41,13 +41,94 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             }
         }
 
-        public async Task<BookVM> GetBook(int bookID)
+        public async Task<BookVM> GetBookByID(int bookID)
         {
             try
             {
+                //Menyra 1
+                var book = _eLibraryDbContext.Books
+                    .Include(p => p.Author)
+                    .Where(p => p.ID == bookID)
+                    .FirstOrDefault();
 
+
+                if (book == null)
+                {
+                    throw new Exception("Book does not exist");
+                }
+
+                //Mapping 
+                var bookVM = new BookVM()
+                {
+                    Author = book.Author.FullName,
+                    IsAvailable = book.IsAvailable,
+                    BookPicURL = "/Images/bookSpeakingVolumes.jpeg",
+                    Description = book.Description,
+                    ID = book.ID,
+                    Title = book.Title
+                };
+
+                return bookVM;
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                throw new Exception("Error in getting book");
+            }
+        }
+
+
+        public async Task<BookVM> GetBookByID_V2(int bookID)
+        {
+            try
+            {
+                var bookVM = new BookVM();
+                using (var conn = new SqlConnection(_eLibraryDbContext.Database.GetConnectionString()))
+                {
+                    bookVM = conn.Query<BookVM>(@"select 
+                                                b.ID,
+                                                b.Title as Title,
+                                                b.Description as Description,
+                                                b.IsAvailable as IsAvailable,
+                                                a.FullName as Author,
+                                                'Images/bookSpeakingVolumes.jpeg' as BookPicURL
+                                                from Books b
+                                                inner join Authors a on a.ID = b.AuthorID
+                                                where @bookID = b.ID and
+                                                      @created < getdate()",
+                                                new 
+                                                {
+                                                    bookID = bookID
+                                                })
+                        .FirstOrDefault();
+                }
+                return bookVM;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error in getting book");
+            }
+        }
+
+        public async Task<BookVM> GetBookByID_V3(int bookID)
+        {
+            try
+            {
+                var bookVM = (from book in _eLibraryDbContext.Books
+                              .Include(p => p.Author)
+                              where book.ID == bookID
+                              select new BookVM()
+                              {
+                                  Author = book.Author.FullName,
+                                  IsAvailable = book.IsAvailable,
+                                  BookPicURL = "Images/bookSpeakingVolumes.jpeg",
+                                  Description = book.Description,
+                                  ID = book.ID,
+                                  Title = book.Title
+                              }).FirstOrDefault();
+
+                return bookVM;
+            }
+            catch (Exception ex)
             {
                 throw new Exception("Error in getting book");
             }

@@ -16,6 +16,21 @@ namespace eLibrary.Controllers
             return View();
         }
 
+
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                var book = await _bookService.GetBookByID(id);
+                return View(book);
+            }
+            catch(Exception ex)
+            {
+                ViewBag.errorMessage = ex.Message;
+                return View("Error");
+            }
+        }
+
         public async Task<IActionResult> Books()
         {
             try

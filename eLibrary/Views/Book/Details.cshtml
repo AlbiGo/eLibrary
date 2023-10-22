@@ -1,0 +1,29 @@
+﻿@model eLibrary.ViewModels.BookVM
+
+
+<style>
+    img{
+        width : 400px !important;
+    }
+</style>
+<div class="container" style=" .container { max-width:500px; max-height : 500px;}">
+    <div class="card">
+        <div class="card-title">@Model.Title</div>
+        <div class="row">
+            <div class="col-lg-4">
+                <img style="img {width : 400px;}" src="@Model.BookPicURL" />
+            </div>
+            <div class="col-md-6">
+                <div class="card-subtitle"> @Model.Author</div>
+                <div class="card-subtitle"> @Model.Description</div>
+                <div class="card-subtitle"> @Model.Kategoria</div>
+                @if (!@Model.IsAvailable)
+                {
+                    <p style="color : red">
+                        This book is not available. You cannot book it.
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
