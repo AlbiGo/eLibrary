@@ -23,6 +23,7 @@ namespace eLibrary.BusinessLayer.Services.Implementations
                 using (var conn = new SqlConnection(_eLibraryDbContext.Database.GetConnectionString()))
                 {
                     books = conn.Query<BookVM>(@"select 
+                                                b.ID,
                                                 b.Title as Title,
                                                 b.Description as Description,
                                                 b.IsAvailable as IsAvailable,
@@ -37,6 +38,18 @@ namespace eLibrary.BusinessLayer.Services.Implementations
             catch(Exception ex)
             {
                 throw new Exception("Error in retrieving books");
+            }
+        }
+
+        public async Task<BookVM> GetBook(int bookID)
+        {
+            try
+            {
+
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Error in getting book");
             }
         }
     }
