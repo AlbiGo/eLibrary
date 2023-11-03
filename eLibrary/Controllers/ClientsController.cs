@@ -72,7 +72,7 @@ namespace eLibrary.Controllers
             return View(client);
         }
 
-        [HttpGet("borrowbook")]
+        [HttpGet("Clients/borrowbook")]
         public async Task<IActionResult> BorrowBook([FromQuery]int id)
         {
             try

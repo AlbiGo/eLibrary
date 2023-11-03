@@ -63,7 +63,7 @@
         debugger;
         $.ajax({
             type: 'GET',
-            url: url,
+            url: "Clients/borrowbook"+ "/?id=" + id,
             contentType: 'application/json',
             success: function (r) {
                 console.log("RESULT", r);
